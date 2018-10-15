@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       dist: {
         files: {
           'builds/bfe.js': [
-            'build_support/mini_require.js',
+            'src/lib/mini_require.js',
             'src/bfe.js',
             'src/bfestore.js',
             'src/bfelogging.js',
