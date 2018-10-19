@@ -141,9 +141,9 @@ var ie = (function(){
 
 
   function retrieve(uri, bfestore, loadtemplates, bfelog, callback){
+    console.log(`DEBUG: config.retrieve for ${uri} `)
     var $messagediv = $('<div>', {id: "bfeditor-messagediv", class:"col-md-10 main"});
     // var url = config.url + "/profile-edit/server/whichrt";
-    // var url = https://gist.githubusercontent.com/ndushay/12d703259da878ab686dc54cae8c8089/raw/35bdf898247fdf24c55d3cadc4c6a7e154ff89e3/bibframe_instance.json
     var url = 'http://127.0.0.1:8000/__tests__/__fixtures__/instance_ontology.json';
     var dType = (bfestore.state == 'loadmarc') ? 'xml' : 'json';
 
@@ -263,8 +263,8 @@ var ie = (function(){
     "basedbURI": "http://mlvlp04.loc.gov:8230",
     "resourceURI": "http://mlvlp04.loc.gov:8230/resources",
     "profiles": [
-       // versoURL + "/configs?filter[where][configType]=profile"
-       'http://127.0.0.1:8000/__tests__/__fixtures__/verso_profile_response_short.json'
+       versoURL + "/configs?filter[where][configType]=profile"
+       // 'http://127.0.0.1:8000/__tests__/__fixtures__/verso_profile_response_short.json'
        // 'https://gist.githubusercontent.com/ndushay/ad3d33de8f2c082b4fc55a80b1c2d724/raw/264bffaea54600443a340aa57d1ed8a66b6a105b/verso_profiles.json'
     ],
     "startingPoints": [
@@ -299,160 +299,6 @@ var ie = (function(){
            type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
            useResourceTemplates: [ "profile:bf2:NotatedMusic:Instance" ]
          }
-      //  ]},
-      // {"menuGroup": "Serial",
-      //  "menuItems": [
-      //    {
-      //      label: "Instance",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Serial"],
-      //      useResourceTemplates: [ "profile:bf2:Serial:Instance" ]
-      //    },
-      //    {
-      //      label: "Work",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Text"],
-      //      useResourceTemplates: [ "profile:bf2:Serial:Work" ]
-      //    }
-      //
-      //  ]},
-      // {"menuGroup": "Cartographic",
-      //  "menuItems": [
-      //    {
-      //      label: "Instance",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-      //      useResourceTemplates: [ "profile:bf2:Cartographic:Instance" ]
-      //    },
-      //    {
-      //      label: "Work",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-      //      useResourceTemplates: [ "profile:bf2:Cartographic:Work" ]
-      //    }
-      //
-      //  ]},
-      // {"menuGroup": "Sound Recording: Audio CD",
-      //  "menuItems": [
-      //    {
-      //      label: "Instance",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-      //      useResourceTemplates: [ "profile:bf2:SoundRecording:Instance" ]
-      //    },
-      //    {
-      //      label: "Work",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-      //      useResourceTemplates: [ "profile:bf2:SoundRecording:Work" ]
-      //    }
-      //
-      //  ]},
-      // {"menuGroup": "Sound Recording: Audio CD-R",
-      //  "menuItems": [
-      //    {
-      //      label: "Instance",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-      //      useResourceTemplates: [ "profile:bf2:SoundCDR:Instance" ]
-      //    },
-      //    {
-      //      label: "Work",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-      //      useResourceTemplates: [ "profile:bf2:SoundCDR:Work" ]
-      //    }
-      //
-      //  ]},
-      // {"menuGroup": "Sound Recording: Analog",
-      //  "menuItems": [
-      //    {
-      //      label: "Instance",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-      //      useResourceTemplates: [ "profile:bf2:Analog:Instance" ]
-      //    },
-      //    {
-      //      label: "Work",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-      //      useResourceTemplates: [ "profile:bf2:Analog:Work" ]
-      //    }
-      //
-      //  ]},
-      // {"menuGroup": "Moving Image: BluRay DVD",
-      //  "menuItems": [
-      //    {
-      //      label: "Instance",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-      //      useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Instance" ]
-      //    },
-      //    {
-      //      label: "Work",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-      //      useResourceTemplates: [ "profile:bf2:MIBluRayDVD:Work" ]
-      //    }
-      //
-      //  ]},
-      // {"menuGroup": "Moving Image: 35mm Feature Film",
-      //  "menuItems": [
-      //    {
-      //      label: "Instance",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-      //      useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Instance" ]
-      //    },
-      //    {
-      //      label: "Work",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-      //      useResourceTemplates: [ "profile:bf2:35mmFeatureFilm:Work" ]
-      //    }
-      //
-      //  ]},
-      // {"menuGroup": "Prints and Photographs",
-      //  "menuItems": [
-      //    {
-      //      label: "Physical Description",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-      //      useResourceTemplates: [ "profile:bf2:Graphics:Description" ]
-      //    },
-      //    {
-      //      label: "Work",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-      //      useResourceTemplates: [ "profile:bf2:Graphics:Work" ]
-      //    }
-      //
-      //  ]},
-      // {"menuGroup": "Rare Materials",
-      //  "menuItems": [
-      //    {
-      //      label: "Instance",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Instance"],
-      //      useResourceTemplates: [ "profile:bf2:RareMat:Instance" ]
-      //    },
-      //    {
-      //      label: "Work",
-      //      type: ["http://id.loc.gov/ontologies/bibframe/Work"],
-      //      useResourceTemplates: [ "profile:bf2:RareMat:Work" ]
-      //    }
-      //
-      //  ]},
-      // {"menuGroup": "Authorities",
-      //  "menuItems": [
-      //    {
-      //      label: "Person",
-      //      type: ["http://www.loc.gov/standards/mads/rdf/v1.html#PersonalName"],
-      //      useResourceTemplates: [ "profile:bf2:Agent:Person" ]
-      //    },
-      //    {
-      //      label: "Family",
-      //      type: ["http://www.loc.gov/standards/mads/rdf/v1.html#FamilyName"],
-      //      useResourceTemplates: [ "profile:bf2:Agent:Family" ]
-      //    },
-      //    {
-      //      label: "Corporate Body",
-      //      type: ["http://www.loc.gov/standards/mads/rdf/v1.html#CorporateName"],
-      //      useResourceTemplates: [ "profile:bf2:Agent:CorporateBody" ]
-      //    },
-      //    {
-      //      label: "Conference",
-      //      type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Conference"],
-      //      useResourceTemplates: [ "profile:bf2:Agent:Conference" ]
-      //    },
-      //    {
-      //      label: "Jurisdiction",
-      //      type: ["http://www.loc.gov/standards/mads/rdf/v1.html#Territory"],
-      //      useResourceTemplates: [ "profile:bf2:Agent:Jurisdiction" ]
-      //    }
        ]}
 
     ],
@@ -491,4 +337,4 @@ var ie = (function(){
       "callback": myCB
     }
   }
-  var bfeditor = bfe.fulleditor(config, "bfeditor");
+  // var bfeditor = bfe.fulleditor(config, "bfeditor");
