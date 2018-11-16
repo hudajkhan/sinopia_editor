@@ -1,5 +1,6 @@
 import React, { Component }  from 'react'
 import PropertyTemplate from './PropertyTemplate'
+import InputLiteral from './InputLiteral'
 
 class ResourceTemplate extends Component {
 
@@ -25,11 +26,33 @@ class ResourceTemplate extends Component {
         </ul>
         <form id="resourceTemplate" className="form-horizontal" role="form" style={dottedBorder}>
           <h4>BEGINNING OF FORM</h4>
-          <PropertiesWrapper propertyTemplates = {[this.props.resourceTemplates[0].propertyTemplates]} />
+          {/*<PropertiesWrapper propertyTemplates = {[this.props.resourceTemplates[0].propertyTemplates]} />*/}
+          <FormWrapper propertyTemplates = {[this.props.resourceTemplates[0].propertyTemplates]} />
           <h4>END OF FORM</h4>
         </form>
       </div>
     )
+  }
+}
+
+class FormWrapper extends Component{
+  render(){
+    if (this.props.propertyTemplates.length == 0 || this.props.propertyTemplates[0] == {}) {
+      return <h1>We should have propertyTemplates but we don't.</h1>
+    }
+    else {
+      return(
+        <div>
+          {this.props.propertyTemplates[0].map(function(pt, index){
+            if(pt.type == 'literal'){
+              return(
+                <InputLiteral propertyTemplate = {pt} key = {index} />
+              )
+            }
+          })}
+        </div>
+      )
+    }
   }
 }
 
