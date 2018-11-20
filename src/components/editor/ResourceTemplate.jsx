@@ -2,8 +2,13 @@
 
 import React, { Component }  from 'react'
 import FormWrapper from './FormWrapper'
+import PropTypes from 'prop-types'
 
 class ResourceTemplate extends Component {
+
+  static propTypes = {
+    resourceTemplates: PropTypes.array
+  }
 
   render () {
     let dashedBorder = {

@@ -1,8 +1,25 @@
 // Copyright 2018 Stanford University see Apache2.txt for license
 
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class ValueConstraints extends Component {
+
+  static propTypes = {
+      default: PropTypes.array,
+      editable: PropTypes.bool,
+      languageLabel: PropTypes.string,
+      // TODO: Use URL PropType see https://www.npmjs.com/package/url-prop-type
+      languageURI: PropTypes.string,
+      remark: PropTypes.string,
+      repeatable: PropTypes.bool,
+      useValuesFrom: PropTypes.any,
+      // TODO: Use a custom validator to check controlled vocab?
+      valueLanguage: PropTypes.string,
+      validatePattern: PropTypes.string,
+      valueTemplateRefs: PropTypes.array
+  }
+
   render() {
     let dashedBorder = {
       border: '1px dashed',

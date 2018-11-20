@@ -1,12 +1,17 @@
 // Copyright 2018 Stanford University see Apache2.txt for license
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faArrowAltCircleRight } from '@fortawesome/free-solid-svg-icons'
-
+import PropTypes from 'prop-types'
 
 class CanvasMenu extends Component {
+
+  static propTypes = {
+    closeHandleMenu: PropTypes.func
+  }
+  
   render() {
     return(
       <div>
