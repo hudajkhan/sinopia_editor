@@ -52,7 +52,6 @@ We are using webpack as a build tool.  See `webapck.config.js` for build depende
 `npm start` will spin up express directly.
 The express server is available on at [http://localhost:8000](http://localhost:8000).  
 
->>>>>>> Update README and remove references to grunt
 ### Linter for JavaScript
 
 `npm run eslint`
