@@ -2,7 +2,7 @@
 
 import { rdf } from 'rdflib'
 
-export const generate = (graph = rdf.graph()) => {
+export const generate = (graph) => {
   type: 'GENERATE',
-  graph
+  graph: graph
 })

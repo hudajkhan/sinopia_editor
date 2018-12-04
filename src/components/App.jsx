@@ -2,7 +2,8 @@
 
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader'
-import 'react-bootstrap-typeahead/css/Typeahead.css'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
 import HomePage from './HomePage'
 import '../styles/main.css'
 import Editor from './editor/Editor'

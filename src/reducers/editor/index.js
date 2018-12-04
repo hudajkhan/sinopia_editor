@@ -3,10 +3,13 @@
 const RDFInput = (state = [], action) => {
   switch(action.type) {
     case 'ADD_RDF_TRIPLE':
+
       return [
         ...state,
-        id: action.
-        triple: action.triple
+        {
+          id: action.id,
+          triple: action.triple
+        }
       ]
     default:
       return state
