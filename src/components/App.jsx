@@ -10,6 +10,8 @@ import Footer from './Footer'
 import CanvasMenu from './CanvasMenu'
 import { OffCanvas, OffCanvasMenu, OffCanvasBody } from 'react-offcanvas'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import store from '../store'
 
 const FourOhFour = () => <h1>404</h1>
 class App extends Component{
@@ -23,7 +25,6 @@ class App extends Component{
   }
 
   handleOffsetMenu() {
-    console.log('AM I GETTING CLICKED?')
     this.setState({
       isMenuOpened: !this.state.isMenuOpened
     })
@@ -41,14 +42,16 @@ class App extends Component{
         <OffCanvas width={300} transitionDuration={300} isMenuOpened={this.state.isMenuOpened} position={"right"}>
           <OffCanvasBody className={offcanvas_class}>
             <BrowserRouter>
-              <div id="app">
-                <Switch>
-                  <Route exact path='/' render={(props)=><HomePage {...props} triggerHandleOffsetMenu={this.handleOffsetMenu} />} />
-                  <Route exact path='/editor' render={(props)=><Editor {...props} triggerHandleOffsetMenu={this.handleOffsetMenu} />} />
-                  <Route id="404" component={FourOhFour} />
-                </Switch>
-                <Footer />
-              </div>
+              <Provider store={store}>
+                <div id="app">
+                  <Switch>
+                    <Route exact path='/' render={(props)=><HomePage {...props} triggerHandleOffsetMenu={this.handleOffsetMenu} />} />
+                    <Route exact path='/editor' render={(props)=><Editor {...props} triggerHandleOffsetMenu={this.handleOffsetMenu} />} />
+                    <Route id="404" component={FourOhFour} />
+                  </Switch>
+                  <Footer />
+                </div>
+              </Provider>
             </BrowserRouter>
           </OffCanvasBody>
           <OffCanvasMenu className="offcanvas-menu">

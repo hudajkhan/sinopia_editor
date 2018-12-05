@@ -2,6 +2,8 @@
 
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { setItems, removeItems } from '../../actionCreators'
 
 class InputLiteral extends Component {
 
@@ -19,6 +21,7 @@ class InputLiteral extends Component {
       myItems: []
     }
     this.lastId = -1
+    console.warn(props.myItems)
   }
   
   handleChange(event) {
@@ -65,18 +68,29 @@ class InputLiteral extends Component {
           this.noRepeatableNoMandatory(userInputArray, currentcontent)
         }
       }
+      this.props.handleMyItemsChange(userInputArray)
       this.setState({
-        myItems: userInputArray,
-        content_add: "",
+        content_add: ""
       })
+
+      // event.persist()
+      console.log("--------")
+
+      // {content: "", id: }
+      console.log(this.props.myItems)
+      console.log("--------")
+      // console.log(this.state.myItems)
+      // console.log("--------")
+
       event.preventDefault()
     }
   }
 
   handleClick(event) {
     const idToRemove = Number(event.target.dataset["item"])
-    const userInputArray = this.state.myItems.filter((listitem) => {return listitem.id !== idToRemove})
-    this.setState({ myItems: userInputArray })
+    // const userInputArray = this.props.myItems.filter((listitem) => {return listitem.id !== idToRemove})
+    this.props.handleMyItemsRemove(this.props.myItems, idToRemove)
+    // this.setState({ myItems: userInputArray })
   }
   
   checkMandatoryRepeatable() {
@@ -143,4 +157,14 @@ InputLiteral.propTypes = {
   }).isRequired
 }
 
-export default InputLiteral;
+const mapStatetoProps = state => ({ myItems: state.myItems })
+const mapDispatchtoProps = dispatch => ({
+  handleMyItemsChange(test_object){
+    dispatch(setItems(test_object))
+  },
+  handleMyItemsRemove(test_object, id){
+    dispatch(removeItems(test_object, id))
+  }
+})
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(InputLiteral);
