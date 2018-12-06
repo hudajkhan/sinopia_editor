@@ -9,20 +9,15 @@ const setMyItems = (state, action) => {
 }
 
 const removeMyItems = (state, action) => {
-  console.warn("this is the removemyItems reducer")
-
-  console.warn("this is action:")
-  console.warn(action)
-  console.warn("this is state:")
-  console.warn(state) // [{content id},{content id},{content id}]
 
   const idToRemove = action.payload.remove_id
-  // state.filter(listitem => listitem.id !== idToRemove)
+  const item = action.payload.item.filter(listitem => listitem.id !== idToRemove)
 
+  return {
+    ...state,
+    myItems: item
+  }
 
-  // const new_item = item.filter(listitem => listitem.id !== id)
-
-  return Object.assign({}, state.filter(listitem => listitem.id !== idToRemove), {myItems: action.payload })
 }
 
 const rootReducer = (state = DEFAULT_STATE, action) => {
@@ -35,6 +30,6 @@ const rootReducer = (state = DEFAULT_STATE, action) => {
       return state
 
   }
-} 
+}
 
 export default rootReducer

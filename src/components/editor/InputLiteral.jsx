@@ -17,13 +17,12 @@ class InputLiteral extends Component {
     this.noRepeatableYesMandatory = this.noRepeatableYesMandatory.bind(this)
     this.addUserInput = this.addUserInput.bind(this)
     this.state = {
-      content_add: "",
-      myItems: []
+      content_add: ""
     }
     this.lastId = -1
     console.warn(props.myItems)
   }
-  
+
   handleChange(event) {
     const usr_input = event.target.value
     this.setState({ content_add: usr_input })
@@ -50,7 +49,7 @@ class InputLiteral extends Component {
 
   handleKeypress(event) {
     if (event.key == "Enter") {
-      var userInputArray = this.state.myItems
+      var userInputArray = this.props.myItems
       var currentcontent = this.state.content_add.trim()
       if (!currentcontent) {
         return
@@ -60,7 +59,7 @@ class InputLiteral extends Component {
         this.addUserInput(userInputArray, currentcontent)
       /** Input field is not repeatable **/
       } else if (this.props.propertyTemplate.repeatable == "false") {
-       /** Mandatory true, means array must have only 1 item in the array **/ 
+       /** Mandatory true, means array must have only 1 item in the array **/
         if (this.props.propertyTemplate.mandatory == "true") {
           this.noRepeatableYesMandatory(userInputArray, currentcontent)
         /** Mandatory is false, or not defined. Array can have either 0 or 1 item in array. **/
@@ -72,16 +71,6 @@ class InputLiteral extends Component {
       this.setState({
         content_add: ""
       })
-
-      // event.persist()
-      console.log("--------")
-
-      // {content: "", id: }
-      console.log(this.props.myItems)
-      console.log("--------")
-      // console.log(this.state.myItems)
-      // console.log("--------")
-
       event.preventDefault()
     }
   }
@@ -92,12 +81,12 @@ class InputLiteral extends Component {
     this.props.handleMyItemsRemove(this.props.myItems, idToRemove)
     // this.setState({ myItems: userInputArray })
   }
-  
+
   checkMandatoryRepeatable() {
      if (this.props.propertyTemplate.mandatory == "true") {
       if (this.makeAddedList().length > 0) {
         return false
-      } 
+      }
       else {
         return true
       }
@@ -108,12 +97,12 @@ class InputLiteral extends Component {
   }
 
   makeAddedList() {
-    const elements = this.state.myItems.map((listitem) => (
+    const elements = this.props.myItems.map((listitem) => (
       <div
         key={listitem.id}
       >
         {listitem.content}
-      
+
         <button
           id="displayedItem"
           type="button"
@@ -143,7 +132,7 @@ class InputLiteral extends Component {
           />
           {this.makeAddedList()}
         </label>
-        
+
       </div>
     )
   }
