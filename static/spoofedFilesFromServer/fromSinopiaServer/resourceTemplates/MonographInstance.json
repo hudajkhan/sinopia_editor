@@ -215,6 +215,14 @@
         "valueDataType": {},
         "defaults": []
       }
+    },
+    {
+      "propertyLabel": "literal redux tester",
+      "propertyURI": "http://id.loc.gov/ontologies/bibframe/heldBy",
+      "resourceTemplates": [],
+      "type": "literal",
+      "mandatory": "false",
+      "repeatable": "true"
     }
   ]
 }
