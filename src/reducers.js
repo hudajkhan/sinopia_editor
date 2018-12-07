@@ -2,7 +2,7 @@ import { SET_ITEMS, REMOVE_ITEMS } from './actions'
 
 const DEFAULT_STATE = {
   formData: [{
-    id: "label1",
+    id: "Statement of Responsibility Relating to Title Proper (RDA 2.4.2)",
     items: [
     {content:"food", id: 10},
     {content:"bar", id: 11}
@@ -10,41 +10,28 @@ const DEFAULT_STATE = {
   }]
 }
 
+// const newObject = state.formData.map(field => {
+//     if (field.id == action.payload.id) {
+//       field.items.push(action.payload.items)
+//     }  
+//   })
+//   console.log(newObject)
+//   return newObject
 
+const newFunc = (state, action) => {
+  return state.formData.map(field => {
+    if (field.id == action.payload.id) {
+      field.items.push(action.payload.items)
+    } 
+  })
+  // return state.formData.concat(action.payload.items)
 
-
+}
 
 const setMyItems = (state, action) => {
-  console.log("this is the state")
-  console.log(state)
-  console.log("this is the action")
-  console.log(action)
-
-
-
-
   return Object.assign({}, state, {
-    formData: state.formData.concat({
-      id: action.payload.id,
-      items: [action.payload.items]
-    })
+    formData: newFunc(state, action)
   })
-    // state.formData.filter(field => {
-    //   // console.warn(field.id)
-    //   // console.warn(action.payload.id)
-    //     console.log("we should be here")
-
-
-    //     state.formData.concat(
-    //       [{
-    //         id: action.payload.id,
-    //         items: [action.payload.items]
-    //       }]
-    //     )
-    //     console.log(state.formData)
-    // })
-  // )
-
 
 }
 

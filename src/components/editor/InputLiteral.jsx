@@ -13,9 +13,6 @@ class InputLiteral extends Component {
     this.handleKeypress = this.handleKeypress.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.checkMandatoryRepeatable = this.checkMandatoryRepeatable.bind(this)
-    this.noRepeatableNoMandatory = this.noRepeatableNoMandatory.bind(this)
-    this.noRepeatableYesMandatory = this.noRepeatableYesMandatory.bind(this)
-    this.addUserInput = this.addUserInput.bind(this)
     this.state = {
       content_add: ""
     }
@@ -27,61 +24,40 @@ class InputLiteral extends Component {
     this.setState({ content_add: usr_input })
   }
 
-  noRepeatableYesMandatory(userInputArray, currentcontent) {
-    if (userInputArray.length == 0) {
-      this.addUserInput(userInputArray, currentcontent)
-    }
-  }
 
-  noRepeatableNoMandatory(userInputArray, currentcontent) {
-    if (userInputArray.length < 1) {
-      this.addUserInput(userInputArray, currentcontent)
-    }
-  }
+// user adds input 
+// input = {content: "blah", id: 0}
+// pass input to handleMyItemsChange which calls setItems
+// in setItems we do the filtering and adding
 
-  addUserInput(userInputArray, currentcontent) {
-    userInputArray.push({
-      content: currentcontent,
-      id: ++this.lastId
-    })
-  }
 
   handleKeypress(event) {
     if (event.key == "Enter") {
 
-      console.log(this.props.formData)
-      var userInputArray = this.props.formData.filter(item => item.id === this.props.propertyTemplate.propertyLabel)
-      // const result = state.formData.filter(item => item.id === "label1");
+      console.warn(this.props.formData)
 
-      // var test_array = this.props.formData.filter(item => item.id === this.props.propertyTemplate.propertyLabel)
-      // items: [
-      //   {content:"food", id: 10},
-      //   {content:"bar", id: 11}
-      // ]
 
       var currentcontent = this.state.content_add.trim()
       if (!currentcontent) {
         return
       }
-      /** Input field is repeatable, add user input to array.**/
-      if (this.props.propertyTemplate.repeatable == "true") {
-        this.addUserInput(userInputArray, currentcontent)
-      /** Input field is not repeatable **/
-      } else if (this.props.propertyTemplate.repeatable == "false") {
-       /** Mandatory true, means array must have only 1 item in the array **/
-        if (this.props.propertyTemplate.mandatory == "true") {
-          this.noRepeatableYesMandatory(userInputArray, currentcontent)
-        /** Mandatory is false, or not defined. Array can have either 0 or 1 item in array. **/
-        } else {
-          this.noRepeatableNoMandatory(userInputArray, currentcontent)
-        }
-      }
-        const test = {
-          id: this.props.propertyTemplate.propertyLabel,
-          items: userInputArray
-        }
 
-        console.warn(test)
+//       {
+//   formData: [{
+//     id: "Statement of Responsibility Relating to Title Proper (RDA 2.4.2)",
+//     items: [
+//     {content:"food", id: 10},
+//     {content:"bar", id: 11}
+//     ]
+//   }]
+// }
+
+      let item = {content: currentcontent, id: ++this.lastId}
+
+      const test = {
+        id: this.props.propertyTemplate.propertyLabel,
+        items: item
+      }
 
       this.props.handleMyItemsChange(test)
       this.setState({
@@ -164,9 +140,17 @@ InputLiteral.propTypes = {
   }).isRequired
 }
 
-const mapStatetoProps = (state, props) => ({ 
-  formData: state.formData.filter((field)=>{return field.id === props.propertyTemplate.propertyLabel})
-})
+const helpMe = (state,props) => {
+  console.log("help me")
+  
+  return state.formData
+}
+
+const mapStatetoProps = (state, props) => (
+  {
+    formData: helpMe(state,props)
+  }
+)
 const mapDispatchtoProps = dispatch => ({
   handleMyItemsChange(test_object){
     dispatch(setItems(test_object))
