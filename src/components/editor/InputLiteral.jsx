@@ -20,7 +20,6 @@ class InputLiteral extends Component {
       content_add: ""
     }
     this.lastId = -1
-    console.warn(props.myItems)
   }
 
   handleChange(event) {
@@ -49,7 +48,17 @@ class InputLiteral extends Component {
 
   handleKeypress(event) {
     if (event.key == "Enter") {
-      var userInputArray = this.props.myItems
+
+      console.log(this.props.formData)
+      var userInputArray = this.props.formData.filter(item => item.id === this.props.propertyTemplate.propertyLabel)
+      // const result = state.formData.filter(item => item.id === "label1");
+
+      // var test_array = this.props.formData.filter(item => item.id === this.props.propertyTemplate.propertyLabel)
+      // items: [
+      //   {content:"food", id: 10},
+      //   {content:"bar", id: 11}
+      // ]
+
       var currentcontent = this.state.content_add.trim()
       if (!currentcontent) {
         return
@@ -67,7 +76,14 @@ class InputLiteral extends Component {
           this.noRepeatableNoMandatory(userInputArray, currentcontent)
         }
       }
-      this.props.handleMyItemsChange(userInputArray)
+        const test = {
+          id: this.props.propertyTemplate.propertyLabel,
+          items: userInputArray
+        }
+
+        console.warn(test)
+
+      this.props.handleMyItemsChange(test)
       this.setState({
         content_add: ""
       })
@@ -96,26 +112,28 @@ class InputLiteral extends Component {
      }
   }
 
-  makeAddedList() {
-    const elements = this.props.myItems.map((listitem) => (
-      <div
-        key={listitem.id}
-      >
-        {listitem.content}
+  // makeAddedList() {
+  //   const elements = this.props.myItems.map((listitem) => (
+  //     <div
+  //       key={listitem.id}
+  //     >
+  //       {listitem.content}
 
-        <button
-          id="displayedItem"
-          type="button"
-          onClick={this.handleClick}
-          key={listitem.id}
-          data-item={listitem.id}
-          >X
-        </button>
-      </div>
+  //       <button
+  //         id="displayedItem"
+  //         type="button"
+  //         onClick={this.handleClick}
+  //         key={listitem.id}
+  //         data-item={listitem.id}
+  //         >X
+  //       </button>
+  //     </div>
 
-    ))
-    return elements
-  }
+  //   ))
+  //   return elements
+  // }
+
+  // {this.makeAddedList()} GOES ON LINE 151
   render() {
     return (
       <div className="form-group">
@@ -130,7 +148,7 @@ class InputLiteral extends Component {
             value={this.state.content_add}
             id="typeLiteral"
           />
-          {this.makeAddedList()}
+          
         </label>
 
       </div>
@@ -146,7 +164,9 @@ InputLiteral.propTypes = {
   }).isRequired
 }
 
-const mapStatetoProps = state => ({ myItems: state.myItems })
+const mapStatetoProps = (state, props) => ({ 
+  formData: state.formData.filter((field)=>{return field.id === props.propertyTemplate.propertyLabel})
+})
 const mapDispatchtoProps = dispatch => ({
   handleMyItemsChange(test_object){
     dispatch(setItems(test_object))
@@ -156,4 +176,4 @@ const mapDispatchtoProps = dispatch => ({
   }
 })
 
-export default connect(mapStatetoProps, mapDispatchtoProps)(InputLiteral);
+export default connect(mapStatetoProps, mapDispatchtoProps)(InputLiteral); // mapDispatchtoProps

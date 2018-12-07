@@ -1,24 +1,66 @@
 import { SET_ITEMS, REMOVE_ITEMS } from './actions'
 
 const DEFAULT_STATE = {
-  myItems: []
+  formData: [{
+    id: "label1",
+    items: [
+    {content:"food", id: 10},
+    {content:"bar", id: 11}
+    ]
+  }]
 }
 
+
+
+
+
 const setMyItems = (state, action) => {
-  return Object.assign({}, state, {myItems: action.payload })
+  console.log("this is the state")
+  console.log(state)
+  console.log("this is the action")
+  console.log(action)
+
+
+
+
+  return Object.assign({}, state, {
+    formData: state.formData.concat({
+      id: action.payload.id,
+      items: [action.payload.items]
+    })
+  })
+    // state.formData.filter(field => {
+    //   // console.warn(field.id)
+    //   // console.warn(action.payload.id)
+    //     console.log("we should be here")
+
+
+    //     state.formData.concat(
+    //       [{
+    //         id: action.payload.id,
+    //         items: [action.payload.items]
+    //       }]
+    //     )
+    //     console.log(state.formData)
+    // })
+  // )
+
+
 }
 
 const removeMyItems = (state, action) => {
 
   const idToRemove = action.payload.remove_id
-  const item = action.payload.item.filter(listitem => listitem.id !== idToRemove)
+  const formData = action.payload.formData.filter(listitem => listitem.id !== idToRemove)
 
   return {
     ...state,
-    myItems: item
+    formData: formData
   }
 
 }
+
+
 
 const rootReducer = (state = DEFAULT_STATE, action) => {
   switch(action.type) {
