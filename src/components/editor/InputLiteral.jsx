@@ -42,22 +42,15 @@ class InputLiteral extends Component {
         return
       }
 
-//       {
-//   formData: [{
-//     id: "Statement of Responsibility Relating to Title Proper (RDA 2.4.2)",
-//     items: [
-//     {content:"food", id: 10},
-//     {content:"bar", id: 11}
-//     ]
-//   }]
-// }
-
       let item = {content: currentcontent, id: ++this.lastId}
 
       const test = {
         id: this.props.propertyTemplate.propertyLabel,
         items: item
       }
+
+      console.log("this is test")
+      console.log(test)
 
       this.props.handleMyItemsChange(test)
       this.setState({
@@ -140,17 +133,12 @@ InputLiteral.propTypes = {
   }).isRequired
 }
 
-const helpMe = (state,props) => {
-  console.log("help me")
-  
-  return state.formData
-}
 
-const mapStatetoProps = (state, props) => (
-  {
-    formData: helpMe(state,props)
+const mapStatetoProps = (state) => {
+  return {
+    formData: state.formData
   }
-)
+}
 const mapDispatchtoProps = dispatch => ({
   handleMyItemsChange(test_object){
     dispatch(setItems(test_object))

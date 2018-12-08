@@ -18,22 +18,37 @@ const DEFAULT_STATE = {
 //   console.log(newObject)
 //   return newObject
 
+
+// const newWhatever = (formData, itemId, actionpayload) => {
+//   const newObj = formData.map(field => {
+//     if (itemId == actionpayload.id) {
+//       field.items.push(actionpayload.items)
+//     }
+//   })
+
+//   console.log(newObj)
+// }
+
 const newFunc = (state, action) => {
   return state.formData.map(field => {
     if (field.id == action.payload.id) {
-      field.items.push(action.payload.items)
+      
+      field.items = field.items.concat(action.payload.items)
     } 
+    field
   })
-  // return state.formData.concat(action.payload.items)
 
 }
 
 const setMyItems = (state, action) => {
-  return Object.assign({}, state, {
-    formData: newFunc(state, action)
-  })
+  console.log("newFunc")
+  console.log(state)
+  const x = newFunc(state,action)
+  
 
+  return { ...state, formData: x }
 }
+
 
 const removeMyItems = (state, action) => {
 
@@ -50,6 +65,8 @@ const removeMyItems = (state, action) => {
 
 
 const rootReducer = (state = DEFAULT_STATE, action) => {
+console.log("reducer state")
+  console.log(state)
   switch(action.type) {
     case SET_ITEMS:
       return setMyItems(state, action)
