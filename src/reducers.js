@@ -10,41 +10,26 @@ const DEFAULT_STATE = {
   }]
 }
 
-// const newObject = state.formData.map(field => {
-//     if (field.id == action.payload.id) {
-//       field.items.push(action.payload.items)
-//     }  
-//   })
-//   console.log(newObject)
-//   return newObject
+
+// formData = [{},{},{}]
 
 
-// const newWhatever = (formData, itemId, actionpayload) => {
-//   const newObj = formData.map(field => {
-//     if (itemId == actionpayload.id) {
-//       field.items.push(actionpayload.items)
-//     }
-//   })
-
-//   console.log(newObj)
-// }
-
+//  Next thing to work on, if the field.id does not equal actionpayload.id 
+//  how do you add it to the formData array.
 const newFunc = (state, action) => {
   return state.formData.map(field => {
     if (field.id == action.payload.id) {
       
       field.items = field.items.concat(action.payload.items)
     } 
-    field
+    return field
   })
 
 }
 
 const setMyItems = (state, action) => {
-  console.log("newFunc")
-  console.log(state)
   const x = newFunc(state,action)
-  
+
 
   return { ...state, formData: x }
 }

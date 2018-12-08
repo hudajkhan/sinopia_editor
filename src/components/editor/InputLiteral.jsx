@@ -33,10 +33,6 @@ class InputLiteral extends Component {
 
   handleKeypress(event) {
     if (event.key == "Enter") {
-
-      console.warn(this.props.formData)
-
-
       var currentcontent = this.state.content_add.trim()
       if (!currentcontent) {
         return
@@ -46,11 +42,8 @@ class InputLiteral extends Component {
 
       const test = {
         id: this.props.propertyTemplate.propertyLabel,
-        items: item
+        items: [item]
       }
-
-      console.log("this is test")
-      console.log(test)
 
       this.props.handleMyItemsChange(test)
       this.setState({
