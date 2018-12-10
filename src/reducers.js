@@ -21,8 +21,11 @@ const newFunc = (state, action) => {
     if (field.id == action.payload.id) {
       
       field.items = field.items.concat(action.payload.items)
+      return field
+    } else {
+      return action.payload
     } 
-    return field
+    
   })
 
 }
