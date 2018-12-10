@@ -2,6 +2,7 @@
 
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
 import InputLiteral from './InputLiteral'
@@ -13,7 +14,6 @@ const { getResourceTemplate } = require('../../sinopiaServerSpoof.js')
 class ResourceTemplateForm extends Component {
   constructor(props) {
     super(props)
-
     this.rtModalButton = this.rtModalButton.bind(this)
     this.resourceTemplateButtons = this.resourceTemplateButtons.bind(this)
   }
@@ -44,6 +44,8 @@ class ResourceTemplateForm extends Component {
       border: '1px dashed',
       padding: '10px',
     }
+    console.log(`This formData ${this.props.formData}`)
+    console.warn(this.props.formData)
     if (this.props.propertyTemplates.length === 0 || this.props.propertyTemplates[0] === {}) {
       return <h1>There are no propertyTemplates - probably an error.</h1>
     } else {
@@ -96,4 +98,20 @@ ResourceTemplateForm.propTypes = {
   propertyTemplates: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
-export default ResourceTemplateForm
+const mapStatetoProps = (state) => {
+
+  return {
+    formData: state.formData
+  }
+}
+
+const mapDispatchtoProps = dispatch => ({
+  handleMyItemsChange(test_object){
+    // dispatch(setItems(test_object))
+  },
+  handleMyItemsRemove(test_object, id){
+    // dispatch(removeItems(test_object, id))
+  }
+})
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(ResourceTemplateForm);
