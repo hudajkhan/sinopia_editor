@@ -1,15 +1,24 @@
 import { SET_ITEMS, REMOVE_ITEMS } from './actions'
 
 const DEFAULT_STATE = {
-  formData: [{
-    id: "Statement of Responsibility Relating to Title Proper (RDA 2.4.2)",
-    items: [
-    {content:"food", id: 10},
-    {content:"bar", id: 11}
-    ]
-  }]
+//   formData: [{
+//     id: "Statement of Responsibility Relating to Title Proper (RDA 2.4.2)",
+//     items: [
+//     {content:"food", id: 10},
+//     {content:"bar", id: 11}
+//     ]
+//   }]
+// }
+//
+//
+// {
+//   unique_label: {
+//     items: []
+//   }
 }
-
+// { "Syayement of Respons":
+//  items: [{},{},{}]
+// }
 
 // formData = [{},{},{}]
 
@@ -17,24 +26,19 @@ const DEFAULT_STATE = {
 //  Next thing to work on, if the field.id does not equal actionpayload.id
 //  how do you add it to the formData array.
 const newFunc = (state, action) => {
-  return state.formData.map(field => {
-    if (field.id == action.payload.id) {
-
-      field.items = field.items.concat(action.payload.items)
-      return field
-    } else {
-      return action.payload
-    }
-
-  })
-
-
+  const key = action.payload.id
+  if (state.hasOwnProperty(key)) {
+    state[key].items = state[key].items.concat(action.payload.items)
+  } else {
+    state[key] = { items: action.payload.items }
+  }
+  return state[key]
 }
 
 const setMyItems = (state, action) => {
   const x = newFunc(state, action)
-
-  return { ...state, testData: x }
+  return state
+  // return { ...state, testData: x }
 }
 
 
