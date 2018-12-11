@@ -3,6 +3,7 @@ import { SET_ITEMS, REMOVE_ITEMS } from './actions'
 const DEFAULT_STATE = {
   formData: [
     {
+      // could use propertyURI
       id: "Statement of Responsibility Relating to Title Proper (RDA 2.4.2)",
       items: [
         {content:"food", id: 10},
@@ -16,24 +17,7 @@ const DEFAULT_STATE = {
 // formData = [{},{},{}]
 
 
-//  Next thing to work on, if the field.id does not equal actionpayload.id
-//  how do you add it to the formData array.
-const newFunc = (state, action) => {
-  return state.formData.map(field => {
-    if (field.id == action.payload.id) {
 
-      field.items = field.items.concat(action.payload.items)
-      console.log("field: ", field)
-      return field
-    } else {
-      console.log("action.payload", action.payload)
-      return action.payload
-    }
-
-  })
-
-
-}
 
 const setMyItems = (state, action) => {
   // const updatedArray = newFunc(state, action)
