@@ -1,6 +1,7 @@
 // Copyright 2018 Stanford University see Apache2.txt for license
 
 import React, {Component} from 'react'
+import connect from 'react-redux'
 import PropTypes from 'prop-types'
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
@@ -8,6 +9,7 @@ import InputLiteral from './InputLiteral'
 import InputResource from './InputResource'
 import InputLookup from './InputLookup'
 import ModalToggle from './ModalToggle'
+import generateRDF from '../../action
 const { getResourceTemplate } = require('../../sinopiaServerSpoof.js')
 
 class ResourceTemplateForm extends Component {
@@ -17,6 +19,7 @@ class ResourceTemplateForm extends Component {
     this.resourceTemplateButtons = this.resourceTemplateButtons.bind(this)
     this.defaultValues = this.defaultValues.bind(this)
     this.defaultValues()
+    this.previewRDF = this.previewRDF.bind(this)
   }
 
   rtModalButton = (rtId) => {
@@ -29,6 +32,10 @@ class ResourceTemplateForm extends Component {
         propertyTemplates ={resourceTemplate.propertyTemplates}
       />
     )
+  }
+
+  previewRDF = () => {
+    this.props.handleGenerateRDF()
   }
 
   // Note: rtIds is expected to be an array of length at least one
@@ -94,6 +101,10 @@ class ResourceTemplateForm extends Component {
                 })}
               </div>
             <p>END ResourceTemplateForm</p>
+            <button
+              type="button"
+              className="btn btn-success btn-sm"
+              onClick={this.previewRDF}>Preview RDF</button>
           </div>
         </form>
       )
@@ -105,4 +116,10 @@ ResourceTemplateForm.propTypes = {
   propertyTemplates: PropTypes.arrayOf(PropTypes.object).isRequired
 }
 
-export default ResourceTemplateForm
+const mapDispatchToProps = dispatch => ({
+  handleGenerateRDF(){
+    dispatch(getRDF())
+  }
+})
+
+export default connect(mapDispatchToProps)(ResourceTemplateForm)

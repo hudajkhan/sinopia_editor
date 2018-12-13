@@ -2,6 +2,8 @@
 
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { setItems, showItems } from '../../actions/index'
 
 class InputLiteral extends Component {
 
@@ -17,8 +19,7 @@ class InputLiteral extends Component {
     this.defaultLiteralValue = this.defaultLiteralValue.bind(this)
 
     this.state = {
-      content_add: "",
-      myItems: []
+      content_add: ""
     }
     this.lastId = -1
     this.defaultLiteralValue()
@@ -50,7 +51,7 @@ class InputLiteral extends Component {
 
   handleKeypress(event) {
     if (event.key == "Enter") {
-      var userInputArray = this.state.myItems
+      var userInputArray = []
       var currentcontent = this.state.content_add.trim()
       if (!currentcontent) {
         return
@@ -68,18 +69,22 @@ class InputLiteral extends Component {
           this.noRepeatableNoMandatory(userInputArray, currentcontent)
         }
       }
+      const user_input = {
+        id: this.props.propertyTemplate.propertyLabel,
+        items: userInputArray
+      }
+      this.props.handleMyItemsChange(user_input)
       this.setState({
-        myItems: userInputArray,
-        content_add: "",
+        content_add: ""
       })
       event.preventDefault()
     }
   }
 
   handleClick(event) {
-    const idToRemove = Number(event.target.dataset["item"])
-    const userInputArray = this.state.myItems.filter((listitem) => {return listitem.id !== idToRemove})
-    this.setState({ myItems: userInputArray })
+    // const idToRemove = Number(event.target.dataset["item"])
+    // const userInputArray = this.state.myItems.filter((listitem) => {return listitem.id !== idToRemove})
+    // this.setState({ myItems: userInputArray })
   }
   
   checkMandatoryRepeatable() {
@@ -97,39 +102,42 @@ class InputLiteral extends Component {
   }
 
   makeAddedList() {
-    const elements = this.state.myItems.map((listitem) => (
-      <div
-        key={listitem.id}
-      >
-        {listitem.content}
-      
-        <button
-          id="displayedItem"
-          type="button"
-          onClick={this.handleClick}
-          key={listitem.id}
-          data-item={listitem.id}
-          >X
-        </button>
-      </div>
+    let temp = this.props.formData
+      if (temp == undefined) return
+      const elements = temp.items.map((obj) => {
+        console.log(obj.content)
+        return <div
+                key = {obj.id}
+                  > 
+                  {obj.content}
 
-    ))
+                  <button
+                    id="displayedItem"
+                    type="button"
+                    onClick={this.handleClick}
+                    key={obj.id}
+                    data-item={obj.id}
+                          >X
+                  </button>
+                </div>
+      })
+    
     return elements
   }
 
   defaultLiteralValue() {
-    const valConstraint = this.props.propertyTemplate.valueConstraint
-    if (valConstraint == undefined || valConstraint == "") return
+    // const valConstraint = this.props.propertyTemplate.valueConstraint
+    // if (valConstraint == undefined || valConstraint == "") return
 
-    let defvalues
-    try{
-      defvalues = valConstraint.defaults[0]
-    } catch (error) {
-      console.info("valConstraint.defaults is empty in profile")
-    }
+    // let defvalues
+    // try{
+    //   defvalues = valConstraint.defaults[0]
+    // } catch (error) {
+    //   console.info("valConstraint.defaults is empty in profile")
+    // }
 
-    if (defvalues == undefined) return
-    this.state.myItems.push({content: defvalues.defaultLiteral, id: ++this.lastId})
+    // if (defvalues == undefined) return
+    // this.state.myItems.push({content: defvalues.defaultLiteral, id: ++this.lastId})
   }
 
   render() {
@@ -165,4 +173,16 @@ InputLiteral.propTypes = {
   }).isRequired
 }
 
-export default InputLiteral;
+const mapStatetoProps = (state, props) => {
+  return {
+    formData: state.formData.find(obj => obj.id === props.propertyTemplate.propertyLabel)
+  }
+}
+
+const mapDispatchtoProps = dispatch => ({
+  handleMyItemsChange(user_input){
+    dispatch(setItems(user_input))
+  }
+})
+
+export default connect(mapStatetoProps, mapDispatchtoProps)(InputLiteral);
