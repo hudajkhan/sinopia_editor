@@ -1,7 +1,7 @@
 // Copyright 2018 Stanford University see Apache2.txt for license
 
 import React, {Component} from 'react'
-import connect from 'react-redux'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup'
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
@@ -9,7 +9,7 @@ import InputLiteral from './InputLiteral'
 import InputResource from './InputResource'
 import InputLookup from './InputLookup'
 import ModalToggle from './ModalToggle'
-import generateRDF from '../../action
+import generateRDF from '../../actions/index'
 const { getResourceTemplate } = require('../../sinopiaServerSpoof.js')
 
 class ResourceTemplateForm extends Component {
@@ -35,6 +35,7 @@ class ResourceTemplateForm extends Component {
   }
 
   previewRDF = () => {
+    console.log(`In previewRDF`)
     this.props.handleGenerateRDF()
   }
 
@@ -118,7 +119,8 @@ ResourceTemplateForm.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   handleGenerateRDF(){
-    dispatch(getRDF())
+    console.log(`Before dispatch to generateRDF`)
+    dispatch(generateRDF(subject))
   }
 })
 

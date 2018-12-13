@@ -12,13 +12,14 @@ const generateMyRDF = (state, action) => {
         }
     })
   })
-  // Temp solution displays RDF in Turtle, likely use a Modal Component 
+  // Temp solution displays RDF in Turtle, likely use a Modal Component
   // to display graph in multiple formats.
   alert($rdf.serialize(formDoc, graph, 'text/turtle'))
   return { ...state }
 }
 
 const generateRDF = (state=[], action) => {
+  console.log(`Action type is ${action.type}`)
   switch(action.type) {
     case 'GENERATE_RDF':
       return generateMyRDF(state, action)
