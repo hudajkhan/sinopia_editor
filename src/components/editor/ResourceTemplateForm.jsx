@@ -8,6 +8,7 @@ import InputLiteral from './InputLiteral'
 import InputResource from './InputResource'
 import InputLookup from './InputLookup'
 import ModalToggle from './ModalToggle'
+import generateRDF from '../../action
 const { getResourceTemplate } = require('../../sinopiaServerSpoof.js')
 
 class ResourceTemplateForm extends Component {
