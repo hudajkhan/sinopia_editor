@@ -10,13 +10,13 @@ class Header extends Component {
     return (
       <div className="navbar homepage-navbar">
         <div className="navbar-header">
-          <a className="navbar-brand" href="https://google.com">
+          <a className="navbar-brand" href="https://sinopia.io/">
             <img src={SinopiaLogo} height="55px" alt="Sinopia logo" />
           </a>
         </div>
         <ul className= "nav navbar-nav pull-right">
           <li>
-            <Link to='/editor'> BFF (Bib Editor) </Link>
+            <Link to='/editor'>Linked Data Editor</Link>
           </li>
           <li>
             <a className="header-text" href="https://profile-editor.sinopia.io/">Profile Editor</a>

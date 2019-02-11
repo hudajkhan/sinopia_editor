@@ -4,10 +4,12 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import StartingPoints from '../../../src/components/editor/StartingPoints'
 import DropZone from '../../../src/components/editor/StartingPoints'
+import { MemoryRouter } from 'react-router-dom'
 
-const jsdom = require("jsdom");
+const jsdom = require("jsdom")
+require('isomorphic-fetch')
 
-setUpDomEnvironment();
+setUpDomEnvironment()
 
 describe('<StartingPoints />', () => {
   let wrapper = shallow(<StartingPoints />)
@@ -15,12 +17,18 @@ describe('<StartingPoints />', () => {
   it('Has a div with headings', () => {
     expect(wrapper.find('div > h3').text()).toEqual('Create Resource')
   })
+
+  it('has an upload button', async() => {
+    expect(wrapper.find('button#ImportProfile').exists()).toBeTruthy()
+  })
 })
 
 describe('<DropZone />', () => {
-  let wrapper = mount(<DropZone/>)
+  const tempStateCallbackFn = jest.fn()
+  let wrapper = mount(<MemoryRouter><DropZone tempStateCallback={tempStateCallbackFn}/></MemoryRouter>)
 
   it('shows the dropzone div when button is clicked', () => {
+    wrapper.setState({showDropZone: false})
     wrapper.find('button.btn').simulate('click')
     expect(wrapper.find('DropZone > section > p').text())
       .toEqual('Drop resource template file or click to select a file to upload:')
@@ -32,14 +40,27 @@ describe('<DropZone />', () => {
   })
 
   it('hides the dropzone div when the file dialog is canceled', () => {
+    wrapper.setState({showDropZone: true})
     wrapper.find('button.btn').simulate('click')
     expect(wrapper.state('showDropZone')).toBeTruthy()
-    wrapper.instance().updateShowDropZone(false)
+    wrapper.find(DropZone).instance().updateShowDropZone(false)
+    wrapper.setState({showDropZone: false})
+    expect(wrapper.state('showDropZone')).toBeFalsy()
+  })
+
+  it('hides the dropzone div when the resource template menu link is clicked', () => {
+    wrapper.setState({showDropZone: true})
+    wrapper.find('button.btn').simulate('click')
+    expect(wrapper.state('showDropZone')).toBeTruthy()
+    wrapper.find(DropZone).instance().resetShowDropZone()
+    wrapper.setState({showDropZone: false})
     expect(wrapper.state('showDropZone')).toBeFalsy()
   })
 
   describe('simulating a file drop calls the file reading functions', () => {
-    // Dropzone throws an error when performing a drop simulate on the input. This is for code coverage only.
+    // NOTE: This is for code coverage only;  there are no expect statements
+    //  NOTE: this is covered by integration/schemaValidation.test but that doesn't show coverage
+    // Dropzone throws an error when performing a drop simulate on the input.
     it('lets you input a selected file', () => {
       console.error = jest.fn()
       wrapper.find('button.btn').simulate('click')

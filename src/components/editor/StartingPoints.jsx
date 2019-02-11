@@ -3,12 +3,19 @@
 import React, { Component }  from 'react'
 import Dropzone from 'react-dropzone'
 import PropTypes from 'prop-types'
+import Ajv from 'ajv' // JSON schema validation
+const util = require('util') // for JSON schema validation errors
+import { Link } from 'react-router-dom'
 
 class StartingPoints extends Component {
   constructor() {
     super()
     this.handleClick = this.handleClick.bind(this)
     this.onDropFile = this.onDropFile.bind(this)
+    this.ajv = new Ajv({
+      allErrors: true,
+      verbose: true
+    })
     this.state = {
       files: [],
       showDropZone: false
@@ -17,14 +24,34 @@ class StartingPoints extends Component {
 
   handleClick() {
     let val = this.state.showDropZone
-    this.setState({ showDropZone: !val })
+    this.setState({showDropZone: !val})
   }
 
   onDropFile(files) {
-    //supplies the json loaded from the profile file
+    // supplies the json loaded from the resource template
     const handleFileRead = () => {
-      const content = fileReader.result
-      this.props.setResourceTemplateCallback(content)
+      let template
+      try {
+        template = JSON.parse(fileReader.result)
+        var schemaUrl = template.schema || (template.Profile && template.Profile.schema)
+        if (schemaUrl == undefined) {
+          if (template.Profile) {
+            schemaUrl = "https://ld4p.github.io/sinopia/schemas/0.0.1/profile.json"
+          } else {
+            schemaUrl = "https://ld4p.github.io/sinopia/schemas/0.0.1/resource-template.json"
+          }
+          alert(`No schema url found in template. Using ${schemaUrl}`)
+        }
+        this.promiseTemplateValidated(template, schemaUrl)
+        .then(() => {
+          this.props.setResourceTemplateCallback(template)
+        })
+        .catch(err => {
+          alert(`ERROR - CANNOT USE PROFILE/RESOURCE TEMPLATE: problem validating template: ${err}`)
+        })
+      } catch (err) {
+        alert(`ERROR - CANNOT USE PROFILE/RESOURCE TEMPLATE: problem parsing JSON template: ${err}`)
+      }
     }
 
     let fileReader = new window.FileReader()
@@ -38,7 +65,98 @@ class StartingPoints extends Component {
   }
 
   updateShowDropZone = (val) => {
-    this.setState({ showDropZone: val })
+    this.setState({showDropZone: val})
+  }
+
+  promiseTemplateValidated = (template, schemaUrl) => {
+    return new Promise((resolve, reject) => {
+      this.promiseSchemasLoaded(schemaUrl)
+        .then(() => {
+          const valid = this.ajv.validate(schemaUrl, template)
+          if (!valid) {
+            reject(new Error(`${util.inspect(this.ajv.errors)}`))
+          }
+          resolve() // w00t!
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
+  }
+
+  promiseSchemasLoaded = (schemaUrl) => {
+    return new Promise((resolve, reject) => {
+      try {
+        var schemaFunction = this.ajv.getSchema(schemaUrl)
+        if (!schemaFunction) {
+          this.fetchSchemaObjectsPromise(schemaUrl)
+            .then(schemaObjs => {
+              schemaObjs.forEach( (schemaObj) => {
+                this.ajv.addSchema(schemaObj, schemaObj.id)
+              })
+            })
+            .then(() => {
+              resolve()
+            })
+            .catch(err => {
+              reject(new Error(`error getting json schemas ${err}`))
+            })
+        } else {
+          resolve()
+        }
+      }
+      catch(err) {
+        reject(new Error(`error getting json schemas ${err}`))
+      }
+    })
+  }
+
+  // TODO: cache the schemas in local storage (#292)
+  fetchSchemaObjectsPromise = (schemaUrl) => {
+    const schemaPrefixWithVersion = schemaUrl.match(/^(.*\d\.\d\.\d).*$/)[1]
+    // TODO: recurse to fetch schemas from any $ref urls found in schema?
+    const schemaSuffixes = [
+      "profile.json",
+      "resource-templates-array.json",
+      "resource-template.json",
+      "property-templates-array.json",
+      "property-template.json"
+    ]
+    const schemaFetchPromises = []
+    schemaSuffixes.forEach( (schemaSuffix) => {
+      var url = `${schemaPrefixWithVersion}/${schemaSuffix}`
+      schemaFetchPromises.push(this.fetchJsonPromise(url))
+    })
+
+    return Promise.all(schemaFetchPromises)
+  }
+
+  fetchJsonPromise = (uri) => {
+    return new Promise((resolve, reject) => {
+      fetch(uri)
+      .then(resp => {
+        if (resp.ok) {
+          resp.json()
+            .then(data => {
+              resolve(data)
+            })
+            .catch(err => { reject(new Error(`Error parsing json ${uri} - ${err}`))})
+        }
+        else {
+          reject(new Error(`HTTP error fetching ${uri}: ${resp.status} - ${resp.statusText}`))
+        }
+      })
+      .catch((err) => {
+        reject(new Error(`Error fetching ${uri} - ${err}`))
+      })
+    })
+  }
+
+  resetShowDropZone() {
+    this.updateShowDropZone(false)
+    this.setState({files: []})
+    this.props.tempStateCallback()
+
   }
 
   render() {
@@ -51,7 +169,8 @@ class StartingPoints extends Component {
       <section>
         <div className="StartingPoints" style={startingPoints}>
           <h3>Create Resource</h3>
-          <button className="btn btn-primary btn-small" onClick={this.handleClick} >Import Profile</button>
+          <div><Link to={{pathname: "/editor", state: {rtId: this.props.resourceTemplateId}}} onClick={() => {this.resetShowDropZone()}}>{this.props.resourceTemplateId}</Link></div>
+          <button id="ImportProfile" className="btn btn-primary btn-small" onClick={this.handleClick}>Import Profile</button>
           { this.state.showDropZone ? <DropZone showDropZoneCallback={this.updateShowDropZone} dropFileCallback={this.onDropFile} filesCallback={this.state.files}/> : null }
         </div>
       </section>
@@ -65,7 +184,7 @@ class DropZone extends Component {
       <section>
         <br /><p>Drop resource template file <br />
         or click to select a file to upload:</p>
-        <div>
+        <div className="DropZone">
           <Dropzone
             onFileDialogCancel={() => this.props.showDropZoneCallback(false)}
             onDrop={this.props.dropFileCallback.bind(this)}
@@ -89,7 +208,10 @@ DropZone.propTypes = {
   filesCallback: PropTypes.array
 }
 StartingPoints.propTypes = {
-  setResourceTemplateCallback: PropTypes.func
+  tempStateCallback: PropTypes.func,
+  resourceTemplatesCallback: PropTypes.func,
+  setResourceTemplateCallback: PropTypes.func,
+  resourceTemplateId: PropTypes.string
 }
 
 export default StartingPoints;

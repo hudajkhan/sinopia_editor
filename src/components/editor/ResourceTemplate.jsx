@@ -18,15 +18,23 @@ class ResourceTemplate extends Component {
     }
 
     var resourceTemplateData = (rtd) => {
-      let json, result
-      if(rtd !== undefined) {
-        json = JSON.parse(rtd)
-        result = json['Profile']['resourceTemplates'] // from the profile editor
-        console.info(`Using resource templates from profile: ${json['Profile'].id}`)
+      let result
+      if (rtd == undefined) {
+        // e.g. at startup
+        result = [getResourceTemplate(this.props.resourceTemplateId)]
       }
       else {
-        result = [getResourceTemplate(this.props.resourceTemplateId)]
-        console.info(`Using resource template: ${this.props.resourceTemplateId}`)
+        if (typeof rtd == 'object') {
+          // Enable us to  use profiles or resourceTemplate
+          if (rtd.propertyTemplates){
+            result = [rtd]
+          }
+          else if (rtd.Profile) {
+            // TODO:  if we allow profiles to be "imported" into BFF,
+            //  ask user which resourceTemplate they want?
+            result = rtd.Profile.resourceTemplates
+          }
+        }
       }
       return result
     }
@@ -51,6 +59,8 @@ class ResourceTemplate extends Component {
                   <ResourceTemplateForm
                     propertyTemplates = {rt.propertyTemplates}
                     resourceTemplate = {rt}
+                    parentResourceTemplate = {this.props.resourceTemplateId}
+                    rtId = {rt.id}
                   />
                 <h4>END ResourceTemplate</h4>
               </div>
@@ -64,7 +74,7 @@ class ResourceTemplate extends Component {
 
 ResourceTemplate.propTypes = {
   resourceTemplateId: PropTypes.string,
-  resourceTemplateData: PropTypes.string
+  resourceTemplateData: PropTypes.object
 }
 
-export default ResourceTemplate;
+export default  ResourceTemplate

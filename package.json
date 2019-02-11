@@ -13,7 +13,10 @@
   },
   "contributors": [
     "Kirk Hess <khes@loc.gov>",
-    "Jeremy Nelson"
+    "Jeremy Nelson",
+    "Joshua Greben",
+    "Naomi Dushay",
+    "Sarav Shah"
   ],
   "devDependencies": {
     "@babel/core": "^7.1.6",
@@ -37,14 +40,15 @@
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-security": "^1.4.0",
     "eslint-takeoff": "0.0.1",
+    "expect-puppeteer": "^3.5.1",
     "file-loader": "^2.0.0",
     "html-webpack-plugin": "^3.2.0",
     "jest": "^23.6.0",
     "jest-junit": "^5.2.0",
-    "jest-puppeteer": "^3.5.1",
+    "jest-puppeteer": "^3.9.0",
     "jsdom": "13.0.0",
     "jsdom-global": "3.0.2",
-    "puppeteer": "^1.10.0",
+    "puppeteer": "^1.11.0",
     "react-hot-loader": "^4.3.12",
     "style-loader": "^0.23.1",
     "webpack": "^4.25.1",
@@ -64,13 +68,13 @@
     "doc": "docs"
   },
   "scripts": {
-    "analysis": "es6-plato -d static-analysis -n -e .eslintrc.js src src/lib static/js/config.js",
+    "analysis": "es6-plato -d static-analysis -n -e .eslintrc.js src src/lib",
     "build": "webpack -p --progress --mode production",
     "ci": "npm i && npm run eslint && npm run dev-build && npm run jest-cov",
     "dev-build": "webpack --progress --mode development",
     "dev-build-test": "npm run dev-build && npm run test",
     "dev-start": "webpack-dev-server --config ./webpack.config.js --mode development",
-    "eslint": "eslint --max-warnings 32 --color -c .eslintrc.js --ext js,jsx ./src",
+    "eslint": "eslint --max-warnings 34 --color -c .eslintrc.js --ext js,jsx ./src",
     "jest-cov": "jest --coverage --colors",
     "jest-ci": "jest --ci --runInBand --coverage --reporters=default --reporters=jest-junit --colors  && cat ./coverage/lcov.info | coveralls",
     "test": "jest --colors"
@@ -80,16 +84,19 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.8",
     "@fortawesome/free-solid-svg-icons": "^5.5.0",
     "@fortawesome/react-fontawesome": "^0.1.3",
+    "ajv": "^6.6.2",
     "babel-core": "^7.0.0-bridge.0",
     "event-stream": "3.3.4",
     "express": "^4.16.4",
     "identity-obj-proxy": "^3.0.0",
     "merge": "^1.2.1",
+    "n3": "^1.0.2",
     "react": "^16.6.3",
     "react-bootstrap": "^0.32.4",
     "react-bootstrap-typeahead": "^3.2.4",
     "react-dom": "^16.6.3",
     "react-dropzone": "^7.0.1",
+    "react-json-pretty": "^2.0.0",
     "react-offcanvas": "^0.3.1",
     "react-redux": "^6.0.0",
     "react-router-dom": "^4.3.1",
@@ -106,18 +113,14 @@
     },
     "collectCoverageFrom": [
       "src/**/*.js",
-      "src/**/*.jsx",
-      "!src/bfe*.js",
-      "!src/lib/aceconfig.js",
-      "!static/js/config*.js"
+      "src/**/*.jsx"
     ],
     "reporters": [
       "default",
       "jest-junit"
     ],
     "testPathIgnorePatterns": [
-      "/node_modules/",
-      "test-config.js"
+      "/node_modules/"
     ]
   }
 }
